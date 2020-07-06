@@ -17,7 +17,7 @@
         <TextView
             android:id="@+id/days_time"
             android:layout_width="match_parent"
-            android:layout_height="35dp"/>
+            android:layout_height="36dp"/>
         <TextView
             android:id="@+id/days_con"
             android:layout_width="match_parent"
