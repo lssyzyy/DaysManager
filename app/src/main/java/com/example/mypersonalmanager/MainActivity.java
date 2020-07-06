@@ -63,11 +63,12 @@ public class MainActivity extends AppCompatActivity {
         // return super.onPrepareOptionsMenu(item);
     }
 
+    //表面的ListView做个测试垫一垫
     private void initdays() {
-        for (int i = 0; i < 2; i++) {//循环两遍，只添加一遍的话不足以充满屏幕
+        for (int i = 0; i < 2; i++) {
             SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd HH:mm");
             Date curDate = new Date(System.currentTimeMillis());
-            BeanDays apple = new BeanDays(R.drawable.launcher_icon, formatter.format(curDate), "apple");//这里懒得找图片了，直接用系统图片
+            BeanDays apple = new BeanDays(R.drawable.launcher_icon, formatter.format(curDate), "apple");
             dayslist.add(apple);
             BeanDays banana = new BeanDays(R.drawable.launcher_icon, formatter.format(curDate), "banana");
             dayslist.add(banana);
