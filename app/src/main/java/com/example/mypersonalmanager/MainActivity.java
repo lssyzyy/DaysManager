@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             dayslist.add(pear);
             BeanDays grape = new BeanDays(R.drawable.launcher_icon, formatter.format(curDate), "grape");
             dayslist.add(grape);
+            //this is test
         }
     }
 }
