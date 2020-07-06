@@ -60,10 +60,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
-        // return super.onPrepareOptionsMenu(item);
     }
 
-    //表面的ListView做个测试垫一垫1
+    //表面的ListView做个测试垫一垫
     private void initdays() {
         for (int i = 0; i < 2; i++) {
             SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd HH:mm");
