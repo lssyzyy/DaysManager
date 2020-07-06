@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         // return super.onPrepareOptionsMenu(item);
     }
 
-    //表面的ListView做个测试垫一垫
+    //表面的ListView做个测试垫一垫1
     private void initdays() {
         for (int i = 0; i < 2; i++) {
             SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd HH:mm");
