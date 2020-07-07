@@ -2,6 +2,7 @@ package com.example.mypersonalmanager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initdays();//初始数据
         DaysAdapter adapter = new DaysAdapter(MainActivity.this,R.layout.days_list, dayslist);
         ListView listView = findViewById(R.id.hom_days_list);
         listView.setAdapter(adapter);
@@ -37,6 +39,16 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BeanDays fruit = dayslist.get(position);
                 Toast.makeText(MainActivity.this,fruit.getContent(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+        FloatingActionButton button_add=findViewById(R.id.days_add);
+        button_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG,"添加日程");
+                Intent intent=new Intent(MainActivity.this,DaysManagerAdd.class);
+                startActivity(intent);
             }
         });
     }
@@ -63,9 +75,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //表面的ListView做个测试垫一垫
-    private void initdays() {
+    private void adddays() {
         for (int i = 0; i < 2; i++) {
-            SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd HH:mm");
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
             Date curDate = new Date(System.currentTimeMillis());
             BeanDays apple = new BeanDays(R.drawable.launcher_icon, formatter.format(curDate), "apple");
             dayslist.add(apple);
@@ -73,12 +85,6 @@ public class MainActivity extends AppCompatActivity {
             dayslist.add(banana);
             BeanDays orange = new BeanDays(R.drawable.launcher_icon, formatter.format(curDate), "orange");
             dayslist.add(orange);
-            BeanDays watermelon = new BeanDays(R.drawable.launcher_icon, formatter.format(curDate), "watermelon");
-            dayslist.add(watermelon);
-            BeanDays pear = new BeanDays(R.drawable.launcher_icon, formatter.format(curDate), "pear");
-            dayslist.add(pear);
-            BeanDays grape = new BeanDays(R.drawable.launcher_icon, formatter.format(curDate), "grape");
-            dayslist.add(grape);
         }
     }
 }
