@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         DaysAdapter adapter = new DaysAdapter(MainActivity.this,R.layout.days_list, dayslist);
         ListView listView = findViewById(R.id.hom_days_list);
         listView.setAdapter(adapter);
-
+        adddays();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
