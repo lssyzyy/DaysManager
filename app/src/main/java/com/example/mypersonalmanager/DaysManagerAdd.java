@@ -3,14 +3,22 @@ package com.example.mypersonalmanager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import static android.content.ContentValues.TAG;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,7 +27,11 @@ import java.util.Date;
 public class DaysManagerAdd extends AppCompatActivity implements View.OnClickListener {
     private TextView showDate,showTime;
     private Calendar cal;
+    private EditText editText1;
+    private TextView textView1,textView2;
+    private SQLiteDatabase db;
     private int year,month,day,hour,minute;
+    MyDatabaseHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +45,28 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
         showTime=findViewById(R.id.day_showtime);
         showTime.setOnClickListener(this);
         showTime.setText(new SimpleDateFormat("HH:mm").format(new Date(System.currentTimeMillis())));
+
+        helper=new MyDatabaseHelper(this,"daydata",null,1);
+
+        FloatingActionButton mday_add=findViewById(R.id.daymanager_ok);
+        editText1=findViewById(R.id.daymanager_content);
+        textView2=findViewById(R.id.day_showdate);
+        textView1=findViewById(R.id.day_showtime);
+        mday_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db=helper.getWritableDatabase();
+                Insertdata();
+                if(editText1.getText().toString().length()!=0){
+                    Toast.makeText(DaysManagerAdd.this,"添加成功",Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(DaysManagerAdd.this,"日程为空",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
     }
 
     private void getDate() {
@@ -64,7 +98,7 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                 TimePickerDialog.OnTimeSetListener listener1=new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker arg0, int hourOfDay, int minute) {
-                        showTime.setText(hour+":"+minute);
+                        showTime.setText(hourOfDay+":"+minute);
                     }
                 };
                 TimePickerDialog dialog1=new TimePickerDialog(DaysManagerAdd.this, TimePickerDialog.THEME_HOLO_LIGHT, listener1, hour, minute,true);
@@ -73,5 +107,12 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
             default:
                 break;
         }
+    }
+    private void Insertdata(){
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("dayid",textView2.getText().toString());
+        contentValues.put("time",textView1.getText().toString());
+        contentValues.put("content",editText1.getText().toString());
+        db.insert("daysdb",null,contentValues);
     }
 }

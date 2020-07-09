@@ -1,18 +1,18 @@
 package com.example.mypersonalmanager;
 
 public class BeanDays {
-    private int imageId;
+    private String dayid;
     private String time;
     private String content;
     public BeanDays(){};
-    public BeanDays(int imagedId,String time,String content){
-        this.imageId=imagedId;
+    public BeanDays(String dayid,String time,String content){
+        this.dayid=dayid;
         this.time=time;
         this.content=content;
     }
 
-    public int getImageId() {
-        return imageId;
+    public String getDayid() {
+        return dayid;
     }
 
     public String getTime() {
@@ -23,8 +23,9 @@ public class BeanDays {
         return content;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+
+    public void setDayid(String dayid) {
+        this.dayid = dayid;
     }
 
     public void setTime(String time) {

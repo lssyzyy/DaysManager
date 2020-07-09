@@ -11,7 +11,7 @@
         <TextView
             android:id="@+id/TX"
             android:layout_centerHorizontal="true"
-            android:text="登陆"
+            android:text="登录"
             android:textStyle="bold"
             android:textSize="30dp"
             android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
             android:layout_below="@+id/TX2"
             android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
-            android:text="登陆"
+            android:text="登录"
             android:layout_marginLeft="70dp"
             android:layout_height="wrap_content" />
         <Button

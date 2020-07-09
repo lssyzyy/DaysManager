@@ -3,6 +3,7 @@ package com.example.mypersonalmanager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +36,8 @@ public class ResActivity extends AppCompatActivity {
                 Instert();
                 if(editText2.getText().toString().equals(editText3.getText().toString())&&editText1.getText().toString().length()!=0&&editText2.getText().toString().length()!=0&&editText3.getText().toString().length()!=0){
                     Toast.makeText(ResActivity.this,"注册成功",Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(ResActivity.this,LoginActivity.class);
+                    startActivity(intent);
                 }else if(editText1.getText().toString().length()==0||editText2.getText().toString().length()==0||editText3.getText().toString().length()==0){
                     Toast.makeText(ResActivity.this,"不能为空",Toast.LENGTH_SHORT).show();
                 }else{

@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class DaysAdapter extends ArrayAdapter<BeanDays> {
@@ -27,12 +29,12 @@ public class DaysAdapter extends ArrayAdapter<BeanDays> {
         else{
             view=convertView;
         }
-        ImageView daysImage=view.findViewById(R.id.days_img);
-        TextView daysContent=view.findViewById(R.id.days_con);
+        TextView daysid=view.findViewById(R.id.days_id);
         TextView daysTime=view.findViewById(R.id.days_time);
-        daysImage.setImageResource(data.getImageId());
-        daysContent.setText(data.getContent());
+        TextView daysContent=view.findViewById(R.id.days_con);
+        daysid.setText(data.getDayid());
         daysTime.setText(data.getTime());
+        daysContent.setText(data.getContent());
         return view;
     }
 }
