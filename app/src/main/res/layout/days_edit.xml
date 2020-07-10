@@ -22,30 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="@drawable/note"/>
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="70dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="20dp"
-                    android:gravity="center_vertical"
-                    android:text="日程"/>
-                <EditText
-                    android:id="@+id/daymanager_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="输入你要做的事..."
-                    android:gravity="center_vertical"/>
-            </LinearLayout>
+            android:orientation="horizontal"
+            android:background="#e5e5e5">
+            <EditText
+                android:id="@+id/day_edit_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,7 +52,7 @@
                     android:gravity="center_vertical"
                     android:text="设置时间"/>
                 <TextView
-                    android:id="@+id/day_showdate"
+                    android:id="@+id/day_edit_showdate"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"/>
@@ -97,7 +80,7 @@
                     android:gravity="center_vertical"
                     android:text="提醒"/>
                 <TextView
-                    android:id="@+id/day_showtime"
+                    android:id="@+id/day_edit_showtime"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"/>
@@ -108,7 +91,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="270dp">
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/daymanager_ok"
+                android:id="@+id/day_edit_ok"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_marginBottom="25dp"

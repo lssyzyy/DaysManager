@@ -4,11 +4,6 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
         <TextView
             android:id="@+id/nav_daysmanager"
             android:layout_width="fill_parent"
@@ -22,30 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="@drawable/note"/>
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="70dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="20dp"
-                    android:gravity="center_vertical"
-                    android:text="日程"/>
-                <EditText
-                    android:id="@+id/daymanager_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="输入你要做的事..."
-                    android:gravity="center_vertical"/>
-            </LinearLayout>
+            android:orientation="horizontal"
+            android:background="#e5e5e5">
+            <TextView
+                android:id="@+id/day_main_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,7 +47,7 @@
                     android:gravity="center_vertical"
                     android:text="设置时间"/>
                 <TextView
-                    android:id="@+id/day_showdate"
+                    android:id="@+id/day_main_showdate"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"/>
@@ -97,7 +75,7 @@
                     android:gravity="center_vertical"
                     android:text="提醒"/>
                 <TextView
-                    android:id="@+id/day_showtime"
+                    android:id="@+id/day_main_showtime"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"/>
@@ -108,15 +86,25 @@
             android:layout_height="100dp"
             android:layout_marginTop="270dp">
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/daymanager_ok"
+                android:id="@+id/daymanager_delete"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_marginBottom="25dp"
                 android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
+                android:layout_marginLeft="100dp"
                 android:clickable="true"
                 android:backgroundTint="#673AB7"
-                app:srcCompat="@drawable/ok"/>
+                app:srcCompat="@drawable/delete"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/daymanager_edit"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginBottom="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="100dp"
+                android:clickable="true"
+                android:backgroundTint="#673AB7"
+                app:srcCompat="@drawable/edit"/>
         </RelativeLayout>
-    </LinearLayout>
 </LinearLayout>

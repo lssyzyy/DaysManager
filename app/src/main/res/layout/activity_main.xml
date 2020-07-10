@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    android:id="@android:id/tabhost">
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
@@ -20,88 +24,48 @@
             android:textSize="56px"
             android:textColor="#9E9E9E"
             android:gravity="center"/>
-        </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:background="@color/nav_two">
-
-        <TextView
-            android:id="@+id/nav_Mon"
-            android:text="一"
-            android:gravity="center"
-            android:textColor="#9E9E9E"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.14"/>
-        <TextView
-            android:id="@+id/nav_Tue"
-            android:text="二"
-            android:gravity="center"
-            android:textColor="#9E9E9E"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.14"/>
-        <TextView
-            android:id="@+id/nav_Wed"
-            android:text="三"
-            android:gravity="center"
-            android:textColor="#9E9E9E"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.14"/>
-        <TextView
-            android:id="@+id/nav_Thu"
-            android:text="四"
-            android:gravity="center"
-            android:textColor="#9E9E9E"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.14"/>
-        <TextView
-            android:id="@+id/nav_Fri"
-            android:text="五"
-            android:gravity="center"
-            android:textColor="#9E9E9E"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.14"/>
-        <TextView
-            android:id="@+id/nav_Sat"
-            android:text="六"
-            android:gravity="center"
-            android:textColor="#9E9E9E"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.14"/>
-        <TextView
-            android:id="@+id/nav_Sun"
-            android:text="日"
-            android:gravity="center"
-            android:textColor="#9E9E9E"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.14"/>
     </LinearLayout>
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <ListView
-            android:id="@+id/hom_days_list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/days_add"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="25dp"
-            android:clickable="true"
-            android:backgroundTint="#673AB7"
-            app:srcCompat="@android:drawable/ic_input_add"/>
-    </RelativeLayout>
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+            </TabWidget>
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_above="@android:id/tabs">
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <ListView
+                        android:id="@+id/days_list1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </FrameLayout>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/days_add"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="25dp"
+                    android:clickable="true"
+                    android:backgroundTint="#673AB7"
+                    app:srcCompat="@drawable/add"/>
+            </RelativeLayout>
+        </LinearLayout>
 
-
-</LinearLayout>
+    </LinearLayout>
+</TabHost>

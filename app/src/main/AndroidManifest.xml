@@ -19,6 +19,8 @@
         <activity android:name=".DaysManagerAdd" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ResActivity" />
+        <activity android:name=".DaysActivity" />
+        <activity android:name=".DaysEdit" />
     </application>
 
 </manifest>
