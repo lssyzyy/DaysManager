@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //实时获取日期
+        //实时获取日期(待修改)
         TextView navDay=findViewById(R.id.nav_days);
         navDay.setText("今天"+"("+new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()))+")");
 
