@@ -40,7 +40,7 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
         getTime();
         showDate=findViewById(R.id.day_showdate);
         showDate.setOnClickListener(this);
-        showDate.setText(new SimpleDateFormat("MM-dd,yy").format(new Date(System.currentTimeMillis())));
+        showDate.setText(new SimpleDateFormat("MM-dd,yyyy").format(new Date(System.currentTimeMillis())));
 
         showTime=findViewById(R.id.day_showtime);
         showTime.setOnClickListener(this);

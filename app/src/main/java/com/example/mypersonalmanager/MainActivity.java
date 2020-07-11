@@ -84,17 +84,6 @@ public class MainActivity extends AppCompatActivity {
         TextView navDay=findViewById(R.id.nav_days);
         navDay.setText("今天"+"("+new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()))+")");
 
-
-        //选项卡
-        tab=findViewById(android.R.id.tabhost);
-        tab.setup();
-        tab.addTab(tab.newTabSpec("tab1").setIndicator("一",null).setContent(R.id.tab1));
-        tab.addTab(tab.newTabSpec("tab2").setIndicator("二",null).setContent(R.id.tab1));
-        tab.addTab(tab.newTabSpec("tab3").setIndicator("三",null).setContent(R.id.tab1));
-        tab.addTab(tab.newTabSpec("tab4").setIndicator("四",null).setContent(R.id.tab1));
-        tab.addTab(tab.newTabSpec("tab5").setIndicator("五",null).setContent(R.id.tab1));
-        tab.addTab(tab.newTabSpec("tab6").setIndicator("六",null).setContent(R.id.tab1));
-        tab.addTab(tab.newTabSpec("tab7").setIndicator("日",null).setContent(R.id.tab1));
     }
 
     @Override

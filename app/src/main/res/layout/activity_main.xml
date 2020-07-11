@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
@@ -29,31 +29,14 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-            </TabWidget>
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_above="@android:id/tabs">
-                <LinearLayout
-                    android:id="@+id/tab1"
+                <ListView
+                    android:id="@+id/days_list1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-                    <ListView
-                        android:id="@+id/days_list1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </FrameLayout>
+                    android:layout_height="wrap_content" />
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/days_add"
                     android:layout_width="75dp"
@@ -68,4 +51,4 @@
         </LinearLayout>
 
     </LinearLayout>
-</TabHost>
+</LinearLayout>
