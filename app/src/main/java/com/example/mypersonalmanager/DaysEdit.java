@@ -19,6 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static android.content.ContentValues.TAG;
 
@@ -111,8 +114,8 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
         values.put("content",editText1.getText().toString());
         values.put("dayid",textView2.getText().toString());
         values.put("time",textView3.getText().toString());
-        int editCount = db.update("daysdb",values,"content = "+intent.getStringExtra(DaysActivity.INFO_DAYS_CON2),null);
+        int editCount = db.update("daysdb",values,"content="+"'"+intent.getStringExtra(DaysActivity.INFO_DAYS_CON2)+"'",null);
         db.close();
-        Toast.makeText(this,"editCount = "+editCount,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"更新了"+editCount+"条数据",Toast.LENGTH_SHORT).show();
     }
 }

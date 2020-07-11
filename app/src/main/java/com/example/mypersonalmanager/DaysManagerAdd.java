@@ -56,8 +56,8 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 db=helper.getWritableDatabase();
-                Insertdata();
                 if(editText1.getText().toString().length()!=0){
+                    Insertdata();
                     Toast.makeText(DaysManagerAdd.this,"添加成功",Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
                     startActivity(intent);

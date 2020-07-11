@@ -8,6 +8,10 @@
         android:orderInCategory="100"
         android:title="我的收支记账"/>
     <item
+        android:id="@+id/mnu_day"
+        android:orderInCategory="100"
+        android:title="日程管理"/>
+    <item
         android:id="@+id/mnu_exit"
         android:orderInCategory="300"
         android:title="退出"/>

@@ -71,6 +71,6 @@ public class DaysActivity extends AppCompatActivity {
         String[] value=new String[]{textView1.getText().toString()};
         int deleteCount = db.delete("daysdb",where,value);
         db.close();
-        Toast.makeText(this,"deleteCount = "+deleteCount,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"删除了"+deleteCount+"条数据",Toast.LENGTH_SHORT).show();
     }
 }

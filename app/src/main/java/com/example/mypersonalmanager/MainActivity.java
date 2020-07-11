@@ -108,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.mnu_pay:
                 Log.i(TAG,"个人收支记账管理被点击");
+                Intent intent=new Intent(MainActivity.this,CostActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.mnu_day:
+                Log.i(TAG,"日程管理被点击");
                 break;
             case R.id.mnu_exit:
                 break;
