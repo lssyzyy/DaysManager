@@ -1,17 +1,24 @@
 package com.example.mypersonalmanager;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,14 +35,16 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
-
     private SQLiteDatabase db;
     private ListView listView;
     private DaysAdapter adapter;
-    private TextView navday,textView1,textView2,textView3;
-    private TabHost tab;
+    SearchView msearchView;
+    Handler myhandler=new Handler();
     MyDatabaseHelper helper;
     private List<BeanDays> dayslist=new ArrayList<>();
+    ArrayList<String> daycontent=new ArrayList<String>();
+    ArrayList<String> daydate=new ArrayList<String>();
+    ArrayList<String> daytime=new ArrayList<String>();
     public static final String INFO_DAYS_CON = "INFO_DAYS_CON";
     public static final String INFO_DAYS_DATE = "INFO_DAYS_DATE";
     public static final String INFO_DAYS_TIME = "INFO_DAYS_TIME";
@@ -45,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //实时获取日期(待修改)
+        TextView navDay=findViewById(R.id.nav_days);
+        navDay.setText("今天"+"("+new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()))+")");
+        //初始化界面
         helper=new MyDatabaseHelper(this,"daydata",null,1);
         db=helper.getWritableDatabase();
         initDatas();
@@ -80,10 +93,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //实时获取日期(待修改)
-        TextView navDay=findViewById(R.id.nav_days);
-        navDay.setText("今天"+"("+new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()))+")");
+        //搜索功能
+        msearchView=findViewById(R.id.day_search);
+        msearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(final String newText) {
+                myhandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String data = newText;
+                        dayslist.clear();
+                        DataSearch(dayslist, data);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                return false;
+            }
+        });
     }
 
     @Override
@@ -101,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.mnu_day:
-                Log.i(TAG,"日程管理被点击");
+                Log.i(TAG,"日程搜索被点击");
+                Intent intent2=new Intent(MainActivity.this,CostActivity.class);
+                startActivity(intent2);
                 break;
             case R.id.mnu_exit:
                 break;
@@ -109,16 +142,43 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //初始化数据
     private void initDatas() {
-        Cursor cursor = db.rawQuery("select * from daysdb",null);
-        while(cursor.moveToNext()){
+        dayslist=queryAllContent();
+        for(BeanDays d:dayslist){
+            if(d!=null){
+                daytime.add(d.getTime());
+                daycontent.add(d.getContent());
+                daydate.add(d.getDayid());
+            }
+        }
+    }
+    public ArrayList<BeanDays> queryAllContent(){
+        ArrayList<BeanDays> datas=new ArrayList<>();
+        Cursor cursor=db.query("daysdb",null,null,null,null,null,null);
+        while (cursor.moveToNext()){
+            BeanDays data=null;
             String dayid = cursor.getString(cursor.getColumnIndex("dayid"));
             String time = cursor.getString(cursor.getColumnIndex("time"));
             String daycontent = cursor.getString(cursor.getColumnIndex("content"));
-            BeanDays datas= new BeanDays(dayid,time,daycontent);
-            dayslist.add(datas);
+            data=new BeanDays(dayid,time,daycontent);
+            datas.add(data);
         }
         cursor.close();
+        return datas;
+    }
+    //搜索功能
+    private void DataSearch(List<BeanDays> datas,String data){
+        int length=daycontent.size();
+        for(int i=0;i<length;i++){
+            if(daycontent.get(i).contains(data)||daydate.get(i).contains(data)||daytime.get(i).contains(data)){
+                BeanDays item=new BeanDays();
+                item.setTime(daytime.get(i));
+                item.setDayid(daydate.get(i));
+                item.setContent(daycontent.get(i));
+                datas.add(item);
+            }
+        }
     }
 
     //上个月字符串

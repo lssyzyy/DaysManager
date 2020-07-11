@@ -15,7 +15,6 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:background="@color/nav">
-
         <TextView
             android:id="@+id/nav_days"
             android:layout_width="fill_parent"
@@ -29,6 +28,12 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
+            <SearchView
+                android:id="@+id/day_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:iconifiedByDefault="false"
+                android:queryHint="输入内容搜索日程..."/>
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
