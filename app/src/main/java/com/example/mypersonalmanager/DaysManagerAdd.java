@@ -37,7 +37,7 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
     private SQLiteDatabase db;
     private int year,month,day,hour,minute;
     MyDatabaseHelper helper;
-    private AlarmManager alarmManager;
+    AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     Calendar c;
     Intent intent2;

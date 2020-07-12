@@ -18,7 +18,9 @@ public class ClockActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         String a=intent.getStringExtra(DaysManagerAdd.INFO_DAYS_CON4);
         String b=intent.getStringExtra(DaysManagerAdd.INFO_DAYS_TIM4);
-        new AlertDialog.Builder(ClockActivity.this).setTitle(b+"的闹钟").setMessage(a)
+        String c=intent.getStringExtra(DaysEdit.INFO_DAYS_CON4);
+        String d=intent.getStringExtra(DaysEdit.INFO_DAYS_TIM4);
+        new AlertDialog.Builder(ClockActivity.this).setTitle(b+c+"的闹钟").setMessage(d+a)
                 .setPositiveButton("关闭闹铃", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

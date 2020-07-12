@@ -1,6 +1,8 @@
 package com.example.mypersonalmanager;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -8,8 +10,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -32,11 +36,24 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
     private TextView textView2,textView3;
     private TextView showDate,showTime;
     private int year,month,day,hour,minute;
+    AlarmManager alarmManager;
+    Switch switch_btn;
+    Intent intent2;
+    private PendingIntent pendingIntent;
+    public static final String INFO_DAYS_CON4 = "INFO_DAYS_CON4";
+    public static final String INFO_DAYS_TIM4 = "INFO_DAYS_TIM4";
+    int flag;
+    Calendar c;
+    FloatingActionButton button_edit;
+    MyDatabaseHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.days_edit);
+        //获取闹钟服务
+        alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
 
+        helper=new MyDatabaseHelper(this,"daydata",null,1);
         editText1=findViewById(R.id.day_edit_content);
         textView2=findViewById(R.id.day_edit_showdate);
         textView3=findViewById(R.id.day_edit_showtime);
@@ -55,14 +72,101 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
         showDate=findViewById(R.id.day_edit_showdate);
         showDate.setOnClickListener(this);
 
-        FloatingActionButton button_delete=findViewById(R.id.day_edit_ok);
-        button_delete.setOnClickListener(new View.OnClickListener() {
+
+        flag=0;
+        showTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG,"编辑日程");
-                EditDate(v);
-                Intent intent=new Intent(DaysEdit.this,MainActivity.class);
-                startActivity(intent);
+                flag=1;
+                Calendar currentTime = Calendar.getInstance();
+                new TimePickerDialog(DaysEdit.this, 0,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                //设置当前时间
+                                c = Calendar.getInstance();
+                                c.setTimeInMillis(System.currentTimeMillis());
+                                // 根据用户选择的时间来设置Calendar对象
+                                c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                                c.set(Calendar.MINUTE,minute);
+                                c.set(Calendar.SECOND,0);
+                                showTime.setText(hourOfDay+":"+minute);
+                            }
+                        }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), false).show();
+            }
+        });
+        //switch和闹钟服务
+        button_edit=findViewById(R.id.day_edit_ok);
+        switch_btn=findViewById(R.id.switch_btn2);
+        switch_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    button_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            db=helper.getWritableDatabase();
+                            if(editText1.getText().toString().length()!=0){
+                                EditDate();
+                                Toast.makeText(DaysEdit.this,"修改成功",Toast.LENGTH_SHORT).show();
+
+                                intent2 = new Intent(DaysEdit.this, ClockActivity.class);
+                                pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
+                                if(flag==0){
+                                    alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                                }else{
+                                    alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+                                }
+                                Toast.makeText(DaysEdit.this, "开启闹钟"+showTime.getText().toString()+editText1.getText().toString(), Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(DaysEdit.this,MainActivity.class);
+                                startActivity(intent);
+                            }else{
+                                Toast.makeText(DaysEdit.this,"日程为空",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }else{
+                    button_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            db=helper.getWritableDatabase();
+                            if(editText1.getText().toString().length()!=0){
+                                EditDate();
+                                intent2 = new Intent(DaysEdit.this, ClockActivity.class);
+                                intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
+                                intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                                pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
+                                alarmManager.cancel(pendingIntent);
+
+                                Toast.makeText(DaysEdit.this,"修改成功",Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(DaysEdit.this,MainActivity.class);
+                                startActivity(intent);
+                            }else{
+                                Toast.makeText(DaysEdit.this,"日程为空",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    Toast.makeText(DaysEdit.this, "取消闹钟", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //不按闹铃添加日程
+        button_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db=helper.getWritableDatabase();
+                if(editText1.getText().toString().length()!=0){
+                    EditDate();
+                    intent2 = new Intent(DaysEdit.this, ClockActivity.class);
+                    intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
+                    intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                    pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
+                    Toast.makeText(DaysEdit.this,"修改成功",Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(DaysEdit.this,MainActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(DaysEdit.this,"日程为空",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -70,7 +174,6 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
     private void getDate() {
         cal= Calendar.getInstance();
         year=cal.get(Calendar.YEAR);       //获取年月日时分秒
-        Log.i("zyy","year"+year);
         month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day=cal.get(Calendar.DAY_OF_MONTH);
     }
@@ -92,21 +195,11 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                 DatePickerDialog dialog=new DatePickerDialog(DaysEdit.this, DatePickerDialog.THEME_HOLO_LIGHT,listener,year,month,day);//主题在这里！后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
                 dialog.show();
                 break;
-            case R.id.day_edit_showtime:
-                TimePickerDialog.OnTimeSetListener listener1=new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker arg0, int hourOfDay, int minute) {
-                        showTime.setText(hourOfDay+":"+minute);
-                    }
-                };
-                TimePickerDialog dialog1=new TimePickerDialog(DaysEdit.this, TimePickerDialog.THEME_HOLO_LIGHT, listener1, hour, minute,true);
-                dialog1.show();
-                break;
             default:
                 break;
         }
     }
-    private void EditDate(View v) {
+    private void EditDate() {
         MyDatabaseHelper helper=new MyDatabaseHelper(this,"daydata",null,1);
         db=helper.getReadableDatabase();
         Intent intent = this.getIntent();
