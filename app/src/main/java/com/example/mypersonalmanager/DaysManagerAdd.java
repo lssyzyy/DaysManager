@@ -13,8 +13,11 @@ import android.provider.AlarmClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -36,10 +39,18 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
     MyDatabaseHelper helper;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
+    Calendar c;
+    Intent intent2;
+    Switch switch_btn;
+    FloatingActionButton mday_add;
+    public static final String INFO_DAYS_CON4 = "INFO_DAYS_CON4";
+    public static final String INFO_DAYS_TIM4 = "INFO_DAYS_TIM4";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.daymanager_add);
+        //获取闹钟服务
+        alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
         getDate();
         getTime();
         showDate=findViewById(R.id.day_showdate);
@@ -52,28 +63,10 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
 
         helper=new MyDatabaseHelper(this,"daydata",null,1);
 
-        FloatingActionButton mday_add=findViewById(R.id.daymanager_ok);
+        mday_add=findViewById(R.id.daymanager_ok);
         editText1=findViewById(R.id.daymanager_content);
-        mday_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                db=helper.getWritableDatabase();
-                if(editText1.getText().toString().length()!=0){
-                    Insertdata();
-                    Toast.makeText(DaysManagerAdd.this,"添加成功",Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(DaysManagerAdd.this,"日程为空",Toast.LENGTH_SHORT).show();
-                }
+        switch_btn=findViewById(R.id.switch_btn);
 
-            }
-        });
-
-        //获取闹钟服务
-        alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(this, ClockActivity.class);
-        pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         showTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,30 +77,89 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 //设置当前时间
-                                Calendar c = Calendar.getInstance();
+                                c = Calendar.getInstance();
                                 c.setTimeInMillis(System.currentTimeMillis());
                                 // 根据用户选择的时间来设置Calendar对象
-                                c.set(Calendar.HOUR_OF_DAY,hourOfDay);//设置闹钟的小时数，API>23可以使用getHour()
-                                c.set(Calendar.MINUTE,minute);//设置闹钟的分钟数，API>23可以使用getMinute()
+                                c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                                c.set(Calendar.MINUTE,minute);
                                 c.set(Calendar.SECOND,0);
                                 showTime.setText(hourOfDay+":"+minute);
-                                // ②设置AlarmManager在Calendar对应的时间启动Activity
-                                alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-                                Toast.makeText(DaysManagerAdd.this, "闹钟已开启！", Toast.LENGTH_SHORT).show();
                             }
                         }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), false).show();
             }
         });
 
-        //取消闹钟
-        Button btn2=findViewById(R.id.day_alarm_cancel);
-        btn2.setOnClickListener(new View.OnClickListener() {
+        //switch开关
+        switch_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
-            public void onClick(View v) {
-                alarmManager.cancel(pendingIntent);
-                Toast.makeText(DaysManagerAdd.this, "闹钟已取消！", Toast.LENGTH_SHORT).show();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    mday_add.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            db=helper.getWritableDatabase();
+                            if(editText1.getText().toString().length()!=0){
+                                Insertdata();
+                                Toast.makeText(DaysManagerAdd.this,"添加成功",Toast.LENGTH_SHORT).show();
+
+                                intent2 = new Intent(DaysManagerAdd.this, ClockActivity.class);
+                                intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
+                                intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                                pendingIntent = PendingIntent.getActivity(DaysManagerAdd.this, 0, intent2, 0);
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+                                Toast.makeText(DaysManagerAdd.this, "开启闹钟"+showTime.getText().toString()+editText1.getText().toString(), Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
+                                startActivity(intent);
+                            }else{
+                                Toast.makeText(DaysManagerAdd.this,"日程为空",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }else{
+                    mday_add.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            db=helper.getWritableDatabase();
+                            if(editText1.getText().toString().length()!=0){
+                                Insertdata();
+                                intent2 = new Intent(DaysManagerAdd.this, ClockActivity.class);
+                                intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
+                                intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                                pendingIntent = PendingIntent.getActivity(DaysManagerAdd.this, 0, intent2, 0);
+                                alarmManager.cancel(pendingIntent);
+
+                                Toast.makeText(DaysManagerAdd.this,"添加成功",Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
+                                startActivity(intent);
+                            }else{
+                                Toast.makeText(DaysManagerAdd.this,"日程为空",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    Toast.makeText(DaysManagerAdd.this, "取消闹钟", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+        //不按闹铃添加日程
+        mday_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db=helper.getWritableDatabase();
+                if(editText1.getText().toString().length()!=0){
+                    Insertdata();
+                    intent2 = new Intent(DaysManagerAdd.this, ClockActivity.class);
+                    intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
+                    intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                    pendingIntent = PendingIntent.getActivity(DaysManagerAdd.this, 0, intent2, 0);
+                    Toast.makeText(DaysManagerAdd.this,"添加成功",Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(DaysManagerAdd.this,"日程为空",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     private void getDate() {

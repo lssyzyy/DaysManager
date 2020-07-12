@@ -59,7 +59,7 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
         button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG,"删除日程");
+                Log.i(TAG,"编辑日程");
                 EditDate(v);
                 Intent intent=new Intent(DaysEdit.this,MainActivity.class);
                 startActivity(intent);

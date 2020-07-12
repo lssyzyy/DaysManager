@@ -2,6 +2,7 @@ package com.example.mypersonalmanager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -12,16 +13,18 @@ public class ClockActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AlertDialog alert=new AlertDialog.Builder(this).create();
-        alert.setIcon(R.drawable.ic_launcher_foreground);
-        alert.setTitle("传递正能量");
-        alert.setMessage("要么出众，要么出局");
-        alert.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        alert.show();
+        mediaPlayer = mediaPlayer.create(this,R.raw.test);
+        mediaPlayer.start();
+        Intent intent = this.getIntent();
+        String a=intent.getStringExtra(DaysManagerAdd.INFO_DAYS_CON4);
+        String b=intent.getStringExtra(DaysManagerAdd.INFO_DAYS_TIM4);
+        new AlertDialog.Builder(ClockActivity.this).setTitle(b+"的闹钟").setMessage(a)
+                .setPositiveButton("关闭闹铃", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mediaPlayer.stop();
+                        ClockActivity.this.finish();
+                    }
+                }).show();
     }
 }
