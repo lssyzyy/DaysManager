@@ -71,7 +71,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/clock"/>
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="260dp"
                 android:layout_height="70dp"
                 android:orientation="vertical">
                 <TextView
@@ -85,6 +85,14 @@
                     android:layout_height="50dp"
                     android:gravity="center_vertical"/>
             </LinearLayout>
+            <Switch
+                android:id="@+id/switch_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textOn="开"
+                android:textOff="关"
+                android:switchMinWidth="40dp"
+                android:layout_marginRight="16dp"/>
         </LinearLayout>
         <RelativeLayout
             android:layout_width="fill_parent"

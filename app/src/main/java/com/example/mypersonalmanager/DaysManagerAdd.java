@@ -45,6 +45,7 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
     FloatingActionButton mday_add;
     public static final String INFO_DAYS_CON4 = "INFO_DAYS_CON4";
     public static final String INFO_DAYS_TIM4 = "INFO_DAYS_TIM4";
+    int flag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +68,11 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
         editText1=findViewById(R.id.daymanager_content);
         switch_btn=findViewById(R.id.switch_btn);
 
-
+        flag=0;
         showTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                flag=1;
                 Calendar currentTime = Calendar.getInstance();
                 new TimePickerDialog(DaysManagerAdd.this, 0,
                         new TimePickerDialog.OnTimeSetListener() {
@@ -106,7 +108,11 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                                 intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
                                 intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysManagerAdd.this, 0, intent2, 0);
-                                alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+                                if(flag==0){
+                                    alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                                }else{
+                                    alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+                                }
                                 Toast.makeText(DaysManagerAdd.this, "开启闹钟"+showTime.getText().toString()+editText1.getText().toString(), Toast.LENGTH_SHORT).show();
                                 Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
                                 startActivity(intent);
