@@ -123,7 +123,7 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
         preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         if (preferences != null) {
             boolean name = preferences.getBoolean("flag", falg);
-            switch_btn.setChecked(name);
+            switch_btn.setChecked(true);
         }
 
         //switch和闹钟服务
