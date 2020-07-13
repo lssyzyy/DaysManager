@@ -17,15 +17,7 @@ public class ClockActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMediaPlayer = MediaPlayer.create(this, getSystemDefultRingtoneUri());
-        mMediaPlayer.setLooping(true);
-        try {
-            mMediaPlayer.prepare();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mMediaPlayer = MediaPlayer.create(this,R.raw.test);
         mMediaPlayer.start();
         Intent intent = this.getIntent();
         String a=intent.getStringExtra("INFO_DAYS_CON");
@@ -40,9 +32,5 @@ public class ClockActivity extends AppCompatActivity {
                         ClockActivity.this.finish();
                     }
                 }).show();
-    }
-    private Uri getSystemDefultRingtoneUri() {
-        return RingtoneManager.getActualDefaultRingtoneUri(this,
-                RingtoneManager.TYPE_RINGTONE);
     }
 }

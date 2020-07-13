@@ -123,7 +123,7 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
         button_edit=findViewById(R.id.day_edit_ok);
         switch_btn=findViewById(R.id.switch_btn2);
         //判断switch状态
-        boolean falg=false;
+        final boolean falg=true;
         SharedPreferences preferences;
         preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         if (preferences != null) {
@@ -150,6 +150,7 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                                 intent2.putExtra(INFO_DAYS_TIM5,showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
                                 if(flag==0&&flag2==0){
+                                    switch_btn.setChecked(false);
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
                                 }else{
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
@@ -220,8 +221,7 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(DaysEdit.this,MainActivity.class);
-                startActivity(intent);
+                DaysEdit.this.finish();
             }
         });
     }

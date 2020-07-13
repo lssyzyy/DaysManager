@@ -68,8 +68,7 @@ public class DaysActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG,"取消操作日程");
-                Intent intent=new Intent(DaysActivity.this,MainActivity.class);
-                startActivity(intent);
+                DaysActivity.this.finish();
             }
         });
     }

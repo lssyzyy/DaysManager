@@ -133,6 +133,7 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                                 intent2.putExtra("INFO_DAYS_TIM",showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysManagerAdd.this, 0, intent2, 0);
                                 if(flag==0&&flag2==0){
+                                    switch_btn.setChecked(false);
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
                                 }else{
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
@@ -203,8 +204,7 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
         mday_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
-                startActivity(intent);
+                DaysManagerAdd.this.finish();
             }
         });
     }

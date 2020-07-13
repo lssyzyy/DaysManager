@@ -105,8 +105,7 @@ public class EditCostData extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent1);
                 break;
             case R.id.bt_cancel:
-                Intent intent2=new Intent(EditCostData.this,CostActivity.class);
-                startActivity(intent2);
+                EditCostData.this.finish();
                 break;
             default:
                 break;
