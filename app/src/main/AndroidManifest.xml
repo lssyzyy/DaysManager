@@ -21,8 +21,9 @@
         <activity android:name=".ResActivity" />
         <activity android:name=".DaysActivity" />
         <activity android:name=".DaysEdit" />
-        <activity android:name=".CostActivity" />
         <activity android:name=".ClockActivity" />
+        <activity android:name=".CostActivity" />
+        <activity android:name=".EditCostData" />
     </application>
 
 </manifest>

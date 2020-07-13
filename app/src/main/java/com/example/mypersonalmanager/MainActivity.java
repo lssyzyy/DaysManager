@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //实时获取日期(待修改)
         TextView navDay=findViewById(R.id.nav_days);
         navDay.setText("今天"+"("+new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()))+")");
@@ -133,8 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.mnu_day:
                 Log.i(TAG,"日程搜索被点击");
-                Intent intent2=new Intent(MainActivity.this,CostActivity.class);
-                startActivity(intent2);
                 break;
             case R.id.mnu_exit:
                 break;

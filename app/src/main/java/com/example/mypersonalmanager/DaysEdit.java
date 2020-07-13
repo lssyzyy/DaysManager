@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -45,7 +46,7 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
     public static final String INFO_DAYS_TIM5 = "INFO_DAYS_TIM4";
     int flag,flag2;
     Calendar c;
-    FloatingActionButton button_edit;
+    FloatingActionButton button_edit,button_cancel;
     MyDatabaseHelper helper;
     SharedPreferences mPref;
     @Override
@@ -115,6 +116,16 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                         }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), false).show();
             }
         });
+
+        //判断switch状态
+        final boolean falg = true;
+        SharedPreferences preferences;
+        preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        if (preferences != null) {
+            boolean name = preferences.getBoolean("flag", falg);
+            switch_btn.setChecked(name);
+        }
+
         //switch和闹钟服务
         button_edit=findViewById(R.id.day_edit_ok);
         switch_btn=findViewById(R.id.switch_btn2);
@@ -129,8 +140,9 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                             if(editText1.getText().toString().length()!=0){
                                 EditDate();
                                 Toast.makeText(DaysEdit.this,"修改成功",Toast.LENGTH_SHORT).show();
-
                                 intent2 = new Intent(DaysEdit.this, ClockActivity.class);
+                                intent2.putExtra(INFO_DAYS_CON5,editText1.getText().toString());
+                                intent2.putExtra(INFO_DAYS_TIM5,showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
                                 if(flag==0&&flag2==0){
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
@@ -153,6 +165,7 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                             if(editText1.getText().toString().length()!=0){
                                 EditDate();
                                 intent2 = new Intent(DaysEdit.this, ClockActivity.class);
+
                                 intent2.putExtra(INFO_DAYS_CON5,editText1.getText().toString());
                                 intent2.putExtra(INFO_DAYS_TIM5,showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
@@ -187,6 +200,15 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                 }else{
                     Toast.makeText(DaysEdit.this,"日程为空",Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        //取消编辑
+        button_cancel=findViewById(R.id.day_edit_cancel);
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(DaysEdit.this,MainActivity.class);
+                startActivity(intent);
             }
         });
     }

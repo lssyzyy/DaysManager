@@ -62,6 +62,16 @@ public class DaysActivity extends AppCompatActivity {
                 startActivity(intent2);
             }
         });
+
+        FloatingActionButton button_cancel=findViewById(R.id.daymanager_cancel);
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG,"取消操作日程");
+                Intent intent=new Intent(DaysActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
     //删除数据
     public void DeleteDate(View view) {

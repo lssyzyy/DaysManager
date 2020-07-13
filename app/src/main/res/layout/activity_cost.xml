@@ -12,11 +12,10 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#673AB7"
         android:layout_marginBottom="25dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        app:srcCompat="@drawable/add"
-        android:clickable="true"
-        android:backgroundTint="#673AB7"/>
+        app:srcCompat="@drawable/add" />
 
 </RelativeLayout>

@@ -6,7 +6,9 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.AlarmClock;
@@ -42,14 +44,13 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
     Calendar c;
     Intent intent2;
     Switch switch_btn;
-    FloatingActionButton mday_add;
-    public static final String INFO_DAYS_CON4 = "INFO_DAYS_CON4";
-    public static final String INFO_DAYS_TIM4 = "INFO_DAYS_TIM4";
-    int flag,flag2;
+    FloatingActionButton mday_add,mday_cancel;
+    int flag,flag2,flag3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.daymanager_add);
+
         //获取闹钟服务
         alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
         getDate();
@@ -67,7 +68,6 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
         mday_add=findViewById(R.id.daymanager_ok);
         editText1=findViewById(R.id.daymanager_content);
         switch_btn=findViewById(R.id.switch_btn);
-
         c = Calendar.getInstance();
         //设置日期
         flag2=0;
@@ -110,8 +110,8 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                         }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), false).show();
             }
         });
-
         //switch开关
+        flag3=0;
         switch_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -119,14 +119,19 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                     mday_add.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            //保存switch状态
+                            SharedPreferences mPref=getSharedPreferences("user", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = mPref.edit();
+                            editor.putBoolean("flag", true);
+                            editor.commit();
+
                             db=helper.getWritableDatabase();
                             if(editText1.getText().toString().length()!=0){
                                 Insertdata();
                                 Toast.makeText(DaysManagerAdd.this,"添加成功",Toast.LENGTH_SHORT).show();
-
                                 intent2 = new Intent(DaysManagerAdd.this, ClockActivity.class);
-                                intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
-                                intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                                intent2.putExtra("INFO_DAYS_CON",editText1.getText().toString());
+                                intent2.putExtra("INFO_DAYS_TIM",showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysManagerAdd.this, 0, intent2, 0);
                                 if(flag==0&&flag2==0){
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
@@ -134,6 +139,7 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
                                 }
                                 Toast.makeText(DaysManagerAdd.this, "开启闹钟", Toast.LENGTH_SHORT).show();
+
                                 Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
                                 startActivity(intent);
                             }else{
@@ -145,15 +151,20 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                     mday_add.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            //保存switch状态
+                            SharedPreferences mPref=getSharedPreferences("user", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = mPref.edit();
+                            editor.putBoolean("flag", false);
+                            editor.commit();
+
                             db=helper.getWritableDatabase();
                             if(editText1.getText().toString().length()!=0){
                                 Insertdata();
                                 intent2 = new Intent(DaysManagerAdd.this, ClockActivity.class);
-                                intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
-                                intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                                intent2.putExtra("INFO_DAYS_CON",editText1.getText().toString());
+                                intent2.putExtra("INFO_DAYS_TIM",showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysManagerAdd.this, 0, intent2, 0);
                                 alarmManager.cancel(pendingIntent);
-
                                 Toast.makeText(DaysManagerAdd.this,"添加成功",Toast.LENGTH_SHORT).show();
                                 Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
                                 startActivity(intent);
@@ -174,8 +185,8 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                 if(editText1.getText().toString().length()!=0){
                     Insertdata();
                     intent2 = new Intent(DaysManagerAdd.this, ClockActivity.class);
-                    intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
-                    intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                    intent2.putExtra("INFO_DAYS_CON",editText1.getText().toString());
+                    intent2.putExtra("INFO_DAYS_TIM",showTime.getText().toString());
                     pendingIntent = PendingIntent.getActivity(DaysManagerAdd.this, 0, intent2, 0);
                     Toast.makeText(DaysManagerAdd.this,"添加成功",Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
@@ -185,7 +196,14 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
-
+        mday_cancel=findViewById(R.id.daymanager_cancel);
+        mday_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getDate() {

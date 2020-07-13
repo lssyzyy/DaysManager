@@ -121,10 +121,23 @@
                 android:layout_height="55dp"
                 android:layout_marginBottom="25dp"
                 android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="100dp"
                 android:clickable="true"
                 android:backgroundTint="#673AB7"
                 app:srcCompat="@drawable/ok"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/daymanager_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:backgroundTint="#673AB7"
+                android:layout_marginRight="100dp"
+                android:clickable="true"
+                app:srcCompat="@drawable/cancel"
+                android:text="取消" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

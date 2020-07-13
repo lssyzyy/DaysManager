@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -42,7 +43,6 @@ public class MyCostDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database=getWritableDatabase();
         database.delete("IMOOC_COST",null,null);
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 

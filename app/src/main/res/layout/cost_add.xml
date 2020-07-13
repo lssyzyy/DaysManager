@@ -11,12 +11,47 @@
         android:layout_margin="4dp"
         android:hint="标题"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="left"
+        android:textColor="#000000"
+        android:text="选择记账类型:"
+        android:textSize="18dp"/>
+    <RadioGroup
+        android:id="@+id/gp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_margin="6dp">
+            <RadioButton
+                android:id="@+id/shouru"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收入"
+                android:checked="true"/>
+            <RadioButton
+                android:id="@+id/zhichu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="支出"/>
+    </RadioGroup>
+
     <EditText
         android:id="@+id/et_cost_money"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:hint="花费/收入"/>
+        android:hint="填写数额"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择时间:"
+        android:layout_gravity="left"
+        android:layout_margin="10dp"
+        android:textSize="20dp"/>
+
     <DatePicker
         android:id="@+id/dp_cost_data"
         android:layout_width="wrap_content"
