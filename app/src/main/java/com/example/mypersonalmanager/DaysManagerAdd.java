@@ -124,7 +124,6 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                             SharedPreferences.Editor editor = mPref.edit();
                             editor.putBoolean("flag", true);
                             editor.commit();
-
                             db=helper.getWritableDatabase();
                             if(editText1.getText().toString().length()!=0){
                                 Insertdata();
@@ -181,6 +180,10 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
         mday_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences mPref=getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = mPref.edit();
+                editor.putBoolean("flag", false);
+                editor.commit();
                 db=helper.getWritableDatabase();
                 if(editText1.getText().toString().length()!=0){
                     Insertdata();

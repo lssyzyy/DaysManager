@@ -117,18 +117,19 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
             }
         });
 
-        //判断switch状态
-        final boolean falg = true;
-        SharedPreferences preferences;
-        preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        if (preferences != null) {
-            boolean name = preferences.getBoolean("flag", falg);
-            switch_btn.setChecked(true);
-        }
+
 
         //switch和闹钟服务
         button_edit=findViewById(R.id.day_edit_ok);
         switch_btn=findViewById(R.id.switch_btn2);
+        //判断switch状态
+        boolean falg=false;
+        SharedPreferences preferences;
+        preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        if (preferences != null) {
+            boolean name = preferences.getBoolean("flag", falg);
+            switch_btn.setChecked(name);
+        }
         switch_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -136,6 +137,10 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                     button_edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            SharedPreferences mPref=getSharedPreferences("user", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = mPref.edit();
+                            editor.putBoolean("flag", true);
+                            editor.commit();
                             db=helper.getWritableDatabase();
                             if(editText1.getText().toString().length()!=0){
                                 EditDate();
@@ -161,6 +166,10 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                     button_edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            SharedPreferences mPref=getSharedPreferences("user", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = mPref.edit();
+                            editor.putBoolean("flag", false);
+                            editor.commit();
                             db=helper.getWritableDatabase();
                             if(editText1.getText().toString().length()!=0){
                                 EditDate();
@@ -187,6 +196,10 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
         button_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences mPref=getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = mPref.edit();
+                editor.putBoolean("flag", false);
+                editor.commit();
                 db=helper.getWritableDatabase();
                 if(editText1.getText().toString().length()!=0){
                     EditDate();
