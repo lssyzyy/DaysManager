@@ -45,7 +45,7 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
     FloatingActionButton mday_add;
     public static final String INFO_DAYS_CON4 = "INFO_DAYS_CON4";
     public static final String INFO_DAYS_TIM4 = "INFO_DAYS_TIM4";
-    int flag;
+    int flag,flag2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +68,29 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
         editText1=findViewById(R.id.daymanager_content);
         switch_btn=findViewById(R.id.switch_btn);
 
+        c = Calendar.getInstance();
+        //设置日期
+        flag2=0;
+        showDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flag2=1;
+                Calendar currentTime = Calendar.getInstance();
+                new DatePickerDialog(DaysManagerAdd.this, 0,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                // 根据用户选择的时间来设置Calendar对象
+                                c.set(Calendar.YEAR,year);
+                                c.set(Calendar.MONTH,month);
+                                c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                                showDate.setText((++month)+"-"+dayOfMonth+","+year);
+                            }
+                        }, currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH),currentTime.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        //设置时分秒
         flag=0;
         showTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,9 +101,6 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                //设置当前时间
-                                c = Calendar.getInstance();
-                                c.setTimeInMillis(System.currentTimeMillis());
                                 // 根据用户选择的时间来设置Calendar对象
                                 c.set(Calendar.HOUR_OF_DAY,hourOfDay);
                                 c.set(Calendar.MINUTE,minute);
@@ -108,12 +128,12 @@ public class DaysManagerAdd extends AppCompatActivity implements View.OnClickLis
                                 intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
                                 intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysManagerAdd.this, 0, intent2, 0);
-                                if(flag==0){
+                                if(flag==0&&flag2==0){
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
                                 }else{
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
                                 }
-                                Toast.makeText(DaysManagerAdd.this, "开启闹钟"+showTime.getText().toString()+editText1.getText().toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DaysManagerAdd.this, "开启闹钟", Toast.LENGTH_SHORT).show();
                                 Intent intent=new Intent(DaysManagerAdd.this,MainActivity.class);
                                 startActivity(intent);
                             }else{

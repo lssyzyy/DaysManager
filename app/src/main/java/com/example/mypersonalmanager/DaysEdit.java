@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,12 +41,13 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
     Switch switch_btn;
     Intent intent2;
     private PendingIntent pendingIntent;
-    public static final String INFO_DAYS_CON4 = "INFO_DAYS_CON4";
-    public static final String INFO_DAYS_TIM4 = "INFO_DAYS_TIM4";
-    int flag;
+    public static final String INFO_DAYS_CON5 = "INFO_DAYS_CON4";
+    public static final String INFO_DAYS_TIM5 = "INFO_DAYS_TIM4";
+    int flag,flag2;
     Calendar c;
     FloatingActionButton button_edit;
     MyDatabaseHelper helper;
+    SharedPreferences mPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,28 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
         showDate=findViewById(R.id.day_edit_showdate);
         showDate.setOnClickListener(this);
 
-
+        c = Calendar.getInstance();
+        //设置日期
+        flag2=0;
+        showDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flag2=1;
+                Calendar currentTime = Calendar.getInstance();
+                new DatePickerDialog(DaysEdit.this, 0,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                // 根据用户选择的时间来设置Calendar对象
+                                c.set(Calendar.YEAR,year);
+                                c.set(Calendar.MONTH,month);
+                                c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                                showDate.setText((++month)+"-"+dayOfMonth+","+year);
+                            }
+                        }, currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH),currentTime.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        //设置时间
         flag=0;
         showTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,9 +106,6 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                //设置当前时间
-                                c = Calendar.getInstance();
-                                c.setTimeInMillis(System.currentTimeMillis());
                                 // 根据用户选择的时间来设置Calendar对象
                                 c.set(Calendar.HOUR_OF_DAY,hourOfDay);
                                 c.set(Calendar.MINUTE,minute);
@@ -112,7 +132,7 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
 
                                 intent2 = new Intent(DaysEdit.this, ClockActivity.class);
                                 pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
-                                if(flag==0){
+                                if(flag==0&&flag2==0){
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
                                 }else{
                                     alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
@@ -133,8 +153,8 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                             if(editText1.getText().toString().length()!=0){
                                 EditDate();
                                 intent2 = new Intent(DaysEdit.this, ClockActivity.class);
-                                intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
-                                intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                                intent2.putExtra(INFO_DAYS_CON5,editText1.getText().toString());
+                                intent2.putExtra(INFO_DAYS_TIM5,showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
                                 alarmManager.cancel(pendingIntent);
 
@@ -158,8 +178,8 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                 if(editText1.getText().toString().length()!=0){
                     EditDate();
                     intent2 = new Intent(DaysEdit.this, ClockActivity.class);
-                    intent2.putExtra(INFO_DAYS_CON4,editText1.getText().toString());
-                    intent2.putExtra(INFO_DAYS_TIM4,showTime.getText().toString());
+                    intent2.putExtra(INFO_DAYS_CON5,editText1.getText().toString());
+                    intent2.putExtra(INFO_DAYS_TIM5,showTime.getText().toString());
                     pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
                     Toast.makeText(DaysEdit.this,"修改成功",Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(DaysEdit.this,MainActivity.class);
