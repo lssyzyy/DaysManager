@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.example.mypersonalmanager"
+        applicationId "com.zyy31701331.mypersonalmanager"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1

@@ -22,9 +22,14 @@ public class ClockActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         String a=intent.getStringExtra("INFO_DAYS_CON");
         String b=intent.getStringExtra("INFO_DAYS_TIM");
-        String c=intent.getStringExtra(DaysEdit.INFO_DAYS_CON5);
-        String d=intent.getStringExtra(DaysEdit.INFO_DAYS_TIM5);
-        new AlertDialog.Builder(ClockActivity.this).setTitle(b+"的闹钟").setMessage(a)
+        String c=intent.getStringExtra("INFO_DAYS_CON2");
+        String d=intent.getStringExtra("INFO_DAYS_TIM2");
+        String clo=a;
+        String clo2=b;
+        if(a==null){
+            clo=c;clo2=d;
+        }
+        new AlertDialog.Builder(ClockActivity.this).setTitle(clo2+"的闹钟").setMessage(clo)
                 .setPositiveButton("关闭闹铃", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

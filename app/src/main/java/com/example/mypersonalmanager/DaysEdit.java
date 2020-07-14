@@ -42,8 +42,6 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
     Switch switch_btn;
     Intent intent2;
     private PendingIntent pendingIntent;
-    public static final String INFO_DAYS_CON5 = "INFO_DAYS_CON4";
-    public static final String INFO_DAYS_TIM5 = "INFO_DAYS_TIM4";
     int flag,flag2;
     Calendar c;
     FloatingActionButton button_edit,button_cancel;
@@ -146,8 +144,8 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                                 EditDate();
                                 Toast.makeText(DaysEdit.this,"修改成功",Toast.LENGTH_SHORT).show();
                                 intent2 = new Intent(DaysEdit.this, ClockActivity.class);
-                                intent2.putExtra(INFO_DAYS_CON5,editText1.getText().toString());
-                                intent2.putExtra(INFO_DAYS_TIM5,showTime.getText().toString());
+                                intent2.putExtra("INFO_DAYS_CON2",editText1.getText().toString());
+                                intent2.putExtra("INFO_DAYS_TIM2",showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
                                 if(flag==0&&flag2==0){
                                     switch_btn.setChecked(false);
@@ -176,8 +174,8 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                                 EditDate();
                                 intent2 = new Intent(DaysEdit.this, ClockActivity.class);
 
-                                intent2.putExtra(INFO_DAYS_CON5,editText1.getText().toString());
-                                intent2.putExtra(INFO_DAYS_TIM5,showTime.getText().toString());
+                                intent2.putExtra("INFO_DAYS_CON2",editText1.getText().toString());
+                                intent2.putExtra("INFO_DAYS_TIM2",showTime.getText().toString());
                                 pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
                                 alarmManager.cancel(pendingIntent);
 
@@ -205,8 +203,8 @@ public class DaysEdit extends AppCompatActivity implements View.OnClickListener{
                 if(editText1.getText().toString().length()!=0){
                     EditDate();
                     intent2 = new Intent(DaysEdit.this, ClockActivity.class);
-                    intent2.putExtra(INFO_DAYS_CON5,editText1.getText().toString());
-                    intent2.putExtra(INFO_DAYS_TIM5,showTime.getText().toString());
+                    intent2.putExtra("INFO_DAYS_CON2",editText1.getText().toString());
+                    intent2.putExtra("INFO_DAYS_TIM2",showTime.getText().toString());
                     pendingIntent = PendingIntent.getActivity(DaysEdit.this, 0, intent2, 0);
                     Toast.makeText(DaysEdit.this,"修改成功",Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(DaysEdit.this,MainActivity.class);
