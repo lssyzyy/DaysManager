@@ -37,9 +37,7 @@ public class EditCostData extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cost_edit);
 
-        MyCostDatabaseHelper helper=new MyCostDatabaseHelper(this,"imooc_daily",null,1);
-        db=helper.getReadableDatabase();
-
+        helper=new MyCostDatabaseHelper(this,"imooc_daily",null,1);
         editText1=findViewById(R.id.et_cost_title1);
         editText2=findViewById(R.id.et_cost_money1);
         showDate=findViewById(R.id.dp_cost_data1);
@@ -94,22 +92,25 @@ public class EditCostData extends AppCompatActivity implements View.OnClickListe
                 dialog.show();
                 break;
             case R.id.bt_comf:
+                db=helper.getWritableDatabase();
                 if(editText2.getText().toString().length()==0||editText1.getText().toString().length()==0){
                     Toast.makeText(EditCostData.this,"标题或钱款不能为空",Toast.LENGTH_SHORT).show();
                 }else if(editText2.getText().toString().length()!=0&&editText1.getText().toString().length()!=0) {
+                    checked=(RadioButton)gp.findViewById(gp.getCheckedRadioButtonId());
                     if(checked.getText().equals("收入")==true){
                         editText2.setText("+"+editText2.getText().toString()+"元");
                     }
                     else {
                         editText2.setText("-"+editText2.getText().toString()+"元");
                     }
-                    checked=(RadioButton)gp.findViewById(gp.getCheckedRadioButtonId());
                     EditData();
+                    Toast.makeText(EditCostData.this,"修改成功",Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(EditCostData.this,CostActivity.class);
                     startActivity(intent);
                 }
                 break;
             case R.id.bt_delete:
+                db=helper.getWritableDatabase();
                 DeleteData();
                 Intent intent1=new Intent(EditCostData.this,CostActivity.class);
                 startActivity(intent1);
