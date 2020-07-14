@@ -14,8 +14,10 @@ public class MyCostDatabaseHelper extends SQLiteOpenHelper {
     public static final String COST_DATE = "cost_date";
     public static final String COST_MONEY = "cost_money";
     public static final String IMOOC_COST = "imooc_cost";
-    public MyCostDatabaseHelper(@Nullable Context context) {
+    private Context context;
+    public MyCostDatabaseHelper(Context context,String name,SQLiteDatabase.CursorFactory factory, int version) {
         super(context, "imooc_daily",null, 1);
+        this.context=context;
     }
 
     @Override
@@ -34,17 +36,8 @@ public class MyCostDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COST_MONEY,b.getCostMoney());
         database.insert(IMOOC_COST,null,cv);
     }
-
-    public Cursor getAllCostData(){
-        SQLiteDatabase database=getWritableDatabase();
-        return database.query("IMOOC_COST",null,null,null,null,null,"COST_DATE "+" ASC");
-    }
-    public void deleteAllData(){
-        SQLiteDatabase database=getWritableDatabase();
-        database.delete("IMOOC_COST",null,null);
-    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("drop table if exists IMOOC_COST");
     }
 }

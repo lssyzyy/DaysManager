@@ -11,11 +11,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -37,30 +40,37 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 
 public class CostActivity extends AppCompatActivity {
-    private List<BeanCost> mlist;
+    private List<BeanCost> mlist=new ArrayList<>();;
     private MyCostDatabaseHelper myCostDatabaseHelper;
     private CostListAdapter mAdapter;
     private int year,month,day;
     private EditText title;
     private EditText money;
     private TextView date;
+    private ListView costList;
     public static final String INFO_COST_TITLE = "INFO_COST_TITLE";
     public static final String INFO_COST_DATE = "INFO_COST_DATE";
     public static final String INFO_COST_MON = "INFO_COST_MON";
+    ArrayList<String> costtitle=new ArrayList<String>();
+    ArrayList<String> costdate=new ArrayList<String>();
+    ArrayList<String> costmoney=new ArrayList<String>();
     private int flag;
     private RadioButton checked;
     private TextView total;
+    SearchView msearchView;
+    Handler myhandler=new Handler();
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cost);
 
-        myCostDatabaseHelper=new MyCostDatabaseHelper(this);
-        mlist=new ArrayList<>();
-        ListView costList=(ListView)findViewById(R.id.lv_main);
+        myCostDatabaseHelper=new MyCostDatabaseHelper(this,"imooc_daily",null,1);
+        db=myCostDatabaseHelper.getWritableDatabase();
         initCostData();
-        mAdapter=new CostListAdapter(this,mlist);
+        mAdapter=new CostListAdapter(this,R.layout.cost_list,mlist);
+        costList=(ListView)findViewById(R.id.lv_main);
         costList.setAdapter(mAdapter);
         costList.setTextFilterEnabled(true);
         costList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,7 +87,28 @@ public class CostActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //搜索功能
+        msearchView=findViewById(R.id.day_search1);
+        msearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(final String newText) {
+                myhandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String data = newText;
+                        mlist.clear();
+                        DataSearch(mlist, data);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+                return false;
+            }
+        });
         //总额计算
         total=findViewById(R.id.total);
         int totalcost=0;
@@ -124,8 +155,9 @@ public class CostActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         BeanCost c=new BeanCost();
+                        money.setInputType(EditorInfo.TYPE_CLASS_PHONE);
                         c.setCostTitle(title.getText().toString());
-                        c.setCostDate((date.getMonth()+1)+"-"+date.getDayOfMonth()+","+date.getYear());
+                        c.setCostDate((date.getMonth()+1)+"月"+date.getDayOfMonth()+"日,"+date.getYear());
                         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -145,6 +177,8 @@ public class CostActivity extends AppCompatActivity {
                             myCostDatabaseHelper.insertCost(c);
                             mlist.add(c);
                             mAdapter.notifyDataSetChanged();
+                            Intent intent2=new Intent(CostActivity.this,CostActivity.class);
+                            startActivity(intent2);
                         }
                         int totalcost=0;
                         String type;
@@ -181,16 +215,40 @@ public class CostActivity extends AppCompatActivity {
         return s.substring(0, pos) + s.substring(pos + 1);
     }
     private void initCostData(){
-        Cursor cursor=myCostDatabaseHelper.getAllCostData();
-        if (cursor!=null){
-            while (cursor.moveToNext()){
-                BeanCost b=new BeanCost();
-                b.setCostTitle(cursor.getString(cursor.getColumnIndex("cost_title")));
-                b.setCostDate(cursor.getString(cursor.getColumnIndex("cost_date")));
-                b.setCostMoney(cursor.getString(cursor.getColumnIndex("cost_money")));
-                mlist.add(b);
+        mlist=queryAllContent();
+        for(BeanCost d:mlist){
+            if(d!=null){
+                costtitle.add(d.getCostTitle());
+                costdate.add(d.getCostDate());
+                costmoney.add(d.getCostMoney());
             }
-            cursor.close();
+        }
+    }
+    public ArrayList<BeanCost> queryAllContent(){
+        ArrayList<BeanCost> datas=new ArrayList<>();
+        Cursor cursor=db.query("IMOOC_COST",null,null,null,null,null,null);
+        while (cursor.moveToNext()){
+            BeanCost data=null;
+            String title = cursor.getString(cursor.getColumnIndex("cost_title"));
+            String date = cursor.getString(cursor.getColumnIndex("cost_date"));
+            String money = cursor.getString(cursor.getColumnIndex("cost_money"));
+            data=new BeanCost(title,date,money);
+            datas.add(data);
+        }
+        cursor.close();
+        return datas;
+    }
+    //搜索功能
+    private void DataSearch(List<BeanCost> datas,String data){
+        int length=costtitle.size();
+        for(int i=0;i<length;i++){
+            if(costtitle.get(i).contains(data)||costdate.get(i).contains(data)||costmoney.get(i).contains(data)){
+                BeanCost item=new BeanCost();
+                item.setCostTitle(costtitle.get(i));
+                item.setCostDate(costdate.get(i));
+                item.setCostMoney(costmoney.get(i));
+                datas.add(item);
+            }
         }
     }
     @Override
@@ -215,4 +273,5 @@ public class CostActivity extends AppCompatActivity {
         }
         return true;
     }
+
 }

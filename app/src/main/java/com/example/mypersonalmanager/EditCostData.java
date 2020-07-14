@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,6 +36,10 @@ public class EditCostData extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cost_edit);
+
+        MyCostDatabaseHelper helper=new MyCostDatabaseHelper(this,"imooc_daily",null,1);
+        db=helper.getReadableDatabase();
+
         editText1=findViewById(R.id.et_cost_title1);
         editText2=findViewById(R.id.et_cost_money1);
         showDate=findViewById(R.id.dp_cost_data1);
@@ -81,23 +87,27 @@ public class EditCostData extends AppCompatActivity implements View.OnClickListe
                 DatePickerDialog.OnDateSetListener listener=new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
-                        showDate.setText((++month)+"-"+day+","+year);
+                        showDate.setText((++month)+"月"+day+"日,"+year);
                     }
                 };
                 DatePickerDialog dialog=new DatePickerDialog(EditCostData.this,DatePickerDialog.THEME_HOLO_LIGHT,listener,year,month,day);
                 dialog.show();
                 break;
             case R.id.bt_comf:
-                checked=(RadioButton)gp.findViewById(gp.getCheckedRadioButtonId());
-                if(checked.getText().equals("收入")==true){
-                    editText2.setText("+"+editText2.getText().toString()+"元");
+                if(editText2.getText().toString().length()==0||editText1.getText().toString().length()==0){
+                    Toast.makeText(EditCostData.this,"标题或钱款不能为空",Toast.LENGTH_SHORT).show();
+                }else if(editText2.getText().toString().length()!=0&&editText1.getText().toString().length()!=0) {
+                    if(checked.getText().equals("收入")==true){
+                        editText2.setText("+"+editText2.getText().toString()+"元");
+                    }
+                    else {
+                        editText2.setText("-"+editText2.getText().toString()+"元");
+                    }
+                    checked=(RadioButton)gp.findViewById(gp.getCheckedRadioButtonId());
+                    EditData();
+                    Intent intent=new Intent(EditCostData.this,CostActivity.class);
+                    startActivity(intent);
                 }
-                else {
-                    editText2.setText("-"+editText2.getText().toString()+"元");
-                }
-                EditData();
-                Intent intent=new Intent(EditCostData.this,CostActivity.class);
-                startActivity(intent);
                 break;
             case R.id.bt_delete:
                 DeleteData();
@@ -118,23 +128,20 @@ public class EditCostData extends AppCompatActivity implements View.OnClickListe
         day=cal.get(Calendar.DAY_OF_MONTH);
     }
     private void EditData(){
-        MyCostDatabaseHelper helper=new MyCostDatabaseHelper(this);
-        SQLiteDatabase db=helper.getReadableDatabase();
         Intent intent=this.getIntent();
         ContentValues values=new ContentValues();
+        editText2.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         values.put("cost_title",editText1.getText().toString());
         values.put("cost_date",showDate.getText().toString());
         values.put("cost_money",editText2.getText().toString());
-        int editCount=db.update("IMOOC_COST",values,"cost_title="+"'"+intent.getStringExtra(CostActivity.INFO_COST_TITLE)+"'",null);
+        db.update("IMOOC_COST",values,"cost_title="+"'"+intent.getStringExtra(CostActivity.INFO_COST_TITLE)+"'",null);
         db.close();
     }
     private void DeleteData(){
-        MyCostDatabaseHelper helper=new MyCostDatabaseHelper(this);
-        SQLiteDatabase db=helper.getReadableDatabase();
         Intent intent=this.getIntent();
         String where="cost_title=?";
         String[] value=new String[]{intent.getStringExtra(CostActivity.INFO_COST_TITLE)};
-        int deleteCount=db.delete("IMOOC_COST",where,value);
+        db.delete("IMOOC_COST",where,value);
         db.close();
     }
     public static String removeChartAt(String s,int pos){

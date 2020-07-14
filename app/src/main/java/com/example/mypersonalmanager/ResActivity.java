@@ -26,7 +26,7 @@ public class ResActivity extends AppCompatActivity {
         editText1 = findViewById(R.id.Ed1);
         editText2 = findViewById(R.id.ED2);
         editText3 = findViewById(R.id.ED3);
-        button = findViewById(R.id.BT1);
+        button = findViewById(R.id.BT3);
         helper=new MyUserdataHelper(this,"userdata",null,1);
 
         button.setOnClickListener(new View.OnClickListener() {

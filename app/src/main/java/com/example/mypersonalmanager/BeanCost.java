@@ -12,7 +12,12 @@ public class BeanCost {
                 ", costMoney='" + costMoney + '\'' +
                 '}';
     }
-
+    public BeanCost(){};
+    public BeanCost(String costTitle,String costDate,String costMoney){
+        this.costTitle=costTitle;
+        this.costDate=costDate;
+        this.costMoney=costMoney;
+    }
     public String getCostTitle() {
         return costTitle;
     }
