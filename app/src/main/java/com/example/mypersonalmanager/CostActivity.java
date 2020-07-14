@@ -139,9 +139,9 @@ public class CostActivity extends AppCompatActivity {
                         else {
                             c.setCostMoney("-"+money.getText().toString()+"元");
                         }
-                        if(c.getCostTitle().length()==0&&c.getCostMoney().length()==0){
+                        if(money.getText().toString().length()==0||title.getText().toString().length()==0){
                             Toast.makeText(CostActivity.this,"标题或钱款不能为空",Toast.LENGTH_SHORT).show();
-                        }else {
+                        }else if(money.getText().toString().length()!=0&&title.getText().toString().length()!=0){
                             myCostDatabaseHelper.insertCost(c);
                             mlist.add(c);
                             mAdapter.notifyDataSetChanged();
